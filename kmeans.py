@@ -24,6 +24,10 @@ This script uses an offline plotting mode and will store and open plots locally.
 To store and share plots online sign up for a plotly API key at https://plot.ly.
 """
 Dist=[]
+a=0
+b=0
+newnum=0
+point1=[]
 plotly = False
 try:
     import plotly
@@ -35,14 +39,14 @@ def main():
 
     # How many points are in our dataset?
     num_points = 5
-
+    newnum=num_points
     # For each of those points how many dimensions do they have?
     # Note: Plotting will only work in two or three dimensions
     dimensions = 2
 
     # Bounds for the values of those points in each dimension
     lower = 0
-    upper = 200
+    upper = 20
 
     # The K in k-means. How many clusters do we assume exist?
     #   - Must be less than num_points
@@ -64,7 +68,8 @@ def main():
         num_clusters,
         cutoff,
         iteration_count,
-        num_points
+        num_points,
+        newnum
     )
 
     # Print our best clusters
@@ -82,7 +87,7 @@ def main():
 #############################################################################
 # K-means Methods
 
-def iterative_kmeans(points, num_clusters, cutoff, iteration_count,num_points):
+def iterative_kmeans(points, num_clusters, cutoff, iteration_count,num_points,newnum):
     print "Iter"
     """
     K-means isn't guaranteed to get the best answer the first time. It might
@@ -94,7 +99,8 @@ def iterative_kmeans(points, num_clusters, cutoff, iteration_count,num_points):
     print "Running K-means %d times to find best clusters ..." % iteration_count
     candidate_clusters = []
     errors = []
-    phase1(points, num_clusters, num_points)
+    newnum, Dist, minim, points=phase1(points, num_clusters, num_points,newnum)
+
     for _ in range(iteration_count):
         clusters = kmeans(points, num_clusters, cutoff)
         error = calculateError(clusters)
@@ -111,34 +117,63 @@ def iterative_kmeans(points, num_clusters, cutoff, iteration_count,num_points):
     best_clusters = candidate_clusters[ind_of_lowest_error]
 
     return best_clusters
-def phase1(points, k, num_points):
+def phase1(points, k, num_points, newnum):
     m=1
+    #print newnum
 
-    for i in range(num_points):
+    for i in range(newnum):
         list1=[]
-        for j in range(num_points):
+        for j in range(newnum):
             list1.append(0)
         Dist.append(list1)
 
-    for i in range(num_points):
-        for j in range(num_points):
+    for i in range(newnum):
+        for j in range(newnum):
             if i<=j:
                 continue
             else:
                 Dist[i][j] = int(getDistance(points[i],points[j]))
-    minim = Dist[1][0]
+    minim = 100000
+    a=1
+    b=0
+
+    x=getmin(num_points,Dist,minim)
+    a,b, minim=x[:]
+    #print a,b
+    print minim
+    print Dist
+    A=[]
+    #point1=[]
+
+
+    #Dist[a][b]=0
+    point1.append(points[a])
+    point1.append(points[b])
+    #print point1
+    A.append(point1)
+    #print A
+    #print points
+    points.remove(points[a])
+    points.remove(points[b])
+    newnum= newnum-2
+    #print points
+    return newnum, Dist, minim, points
+
+
+    #print Dist
+def getmin(num_points, Dist,minim):
     for i in range(num_points):
         for j in range(num_points):
+
             if i<=j:
                 continue
             else:
+                if Dist[i][j]==0:
+                    continue
                 if Dist[i][j]<minim:
                     minim = Dist[i][j]
-    print minim
-
-    A=[]
-
-    print Dist
+                    a,b=i,j
+    return [a,b,minim]
 def kmeans(points, k, cutoff):
 
 
