@@ -145,7 +145,6 @@ def phase1(points, k, num_points, newnum):
     A=[]
     #point1=[]
 
-
     #Dist[a][b]=0
     point1.append(points[a])
     point1.append(points[b])
