@@ -15,4 +15,8 @@ Implementation and visualization of enhanced K means clustering
     ```
 	$ pip install plotly
     ```
-4. 
+4. Run the code from kmeans.py
+    ```
+    $ python kmeans.py
+    ```
+5. Changes to the code should all be done in kmeans.py
