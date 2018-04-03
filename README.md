@@ -1,5 +1,6 @@
 # ekm
 Implementation and visualization of enhanced K means clustering
+Bioinformatics project (S6)
 
 ## Follow the setup instructions below.
 1.  Clone the Repository.
