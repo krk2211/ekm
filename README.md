@@ -1,2 +1,18 @@
 # ekm
 Implementation and visualization of enhanced K means clustering
+
+## Follow the setup instructions below.
+1.  Clone the Repository.
+    ```
+    $ git clone https://github.com/krk2211/ekm.git
+    ```
+
+2. Enter the folder.
+    ```
+    $ cd ekm
+    ```
+3. Install plotly to visualize the scatter plots.
+    ```
+	$ pip install plotly
+    ```
+4. 
