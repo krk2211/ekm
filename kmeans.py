@@ -52,7 +52,7 @@ def main():
 
     # The K in k-means. How many clusters do we assume exist?
     #   - Must be less than num_points
-    num_clusters = 16
+    num_clusters = 10
 
     # When do we say the process has 'converged' and stop updating clusters?
     cutoff = 0.5
@@ -517,7 +517,7 @@ def plotClusters(data, dimensions):
             centroid['name'] = "Centroid " + str(i)
             traceList.append(Scatter3d(**centroid))
 
-    title = "K-means clustering with %s clusters" % str(len(data))
+    title = "Advanced Mid point K-means clustering with %s clusters" % str(len(data))
     plotly.offline.plot({
         "data": traceList,
         "layout": Layout(title=title)
