@@ -40,7 +40,7 @@ except ImportError:
 def main():
 
     # How many points are in our dataset?
-    num_points = 30
+    num_points = 3000
     newnum=num_points
     # For each of those points how many dimensions do they have?
     # Note: Plotting will only work in two or three dimensions
@@ -52,7 +52,7 @@ def main():
 
     # The K in k-means. How many clusters do we assume exist?
     #   - Must be less than num_points
-    num_clusters = 7
+    num_clusters = 16
 
     # When do we say the process has 'converged' and stop updating clusters?
     cutoff = 0.5
@@ -148,7 +148,7 @@ def getCentroid(x):
 
         for j in i:
             count+=1
-            
+
             #print j[0]
             sumx += j.coords[0]
             sumy += j.coords[1]
