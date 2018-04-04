@@ -4,6 +4,8 @@
 from __future__ import division
 import math
 import random
+import numpy as np
+import pandas as pd
 
 """
 This is a pure Python implementation of the K-means Clustering algorithmn. The
@@ -38,7 +40,7 @@ except ImportError:
 def main():
 
     # How many points are in our dataset?
-    num_points = 5
+    num_points = 100
     newnum=num_points
     # For each of those points how many dimensions do they have?
     # Note: Plotting will only work in two or three dimensions
@@ -57,31 +59,26 @@ def main():
 
     # Generate some points to cluster
     # Note: If you want to use your own data, set points equal to it here.
-    points = [
-        makeRandomPoint(dimensions, lower, upper) for i in xrange(num_points)
-    ]
+    # points = [
+    #     makeRandomPoint(dimensions, lower, upper) for i in xrange(num_points)
+    # ]
+    data = pd.read_csv('dataset1.csv')
+    data.head()
+    X = data['x'].values
+    Y = data['y'].values
+    points = [Point(i) for i in np.array(list(zip(X, Y)))]
+    iteration_count= 1
 
-    # Cluster those data!
-    iteration_count = 10
     best_clusters = iterative_kmeans(
-        points,
-        num_clusters,
-        cutoff,
-        iteration_count,
-        num_points,
-        newnum
-    )
+            points,
+            num_clusters,
+            cutoff,
+            iteration_count,
+            num_points,
+            newnum
+        )
 
-    # Print our best clusters
-    for i, c in enumerate(best_clusters):
-        for p in c.points:
-            print "A",
-            #print " Cluster: ", i, "\t Point :", p
 
-    # Display clusters using plotly for 2d data
-    if dimensions in [2, 3] and plotly:
-        print "Plotting points, launching browser ..."
-        plotClusters(best_clusters, dimensions)
 
 
 #############################################################################
@@ -99,7 +96,7 @@ def iterative_kmeans(points, num_clusters, cutoff, iteration_count,num_points,ne
     print "Running K-means %d times to find best clusters ..." % iteration_count
     candidate_clusters = []
     errors = []
-    newnum, Dist, minim, points=phase1(points, num_clusters, num_points,newnum)
+    #newnum, Dist, minim, points=phase1(points, num_clusters, num_points,newnum)
 
     for _ in range(iteration_count):
         clusters = kmeans(points, num_clusters, cutoff)
