@@ -53,10 +53,10 @@ def main():
 
     # The K in k-means. How many clusters do we assume exist?
     #   - Must be less than num_points
-    num_clusters = 7
+    num_clusters = 16
 
     # When do we say the process has 'converged' and stop updating clusters?
-    cutoff = 0.1
+    cutoff = 0.001
 
     # Generate some points to cluster
     # Note: If you want to use your own data, set points equal to it here.
