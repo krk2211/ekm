@@ -40,7 +40,7 @@ except ImportError:
 def main():
 
     # How many points are in our dataset?
-    num_points = 100
+    num_points = 10
     newnum=num_points
     # For each of those points how many dimensions do they have?
     # Note: Plotting will only work in two or three dimensions
@@ -52,7 +52,7 @@ def main():
 
     # The K in k-means. How many clusters do we assume exist?
     #   - Must be less than num_points
-    num_clusters = 3
+    num_clusters = 7
 
     # When do we say the process has 'converged' and stop updating clusters?
     cutoff = 0.2
@@ -64,10 +64,13 @@ def main():
     # ]
     data = pd.read_csv('dataset1.csv')
     data.head()
-    X = data['x'].values
-    Y = data['y'].values
+    X = [abs(i) for i in data['x'].values]
+    Y = [abs(i) for i in data['y'].values]
+
+    # print X
+    # print Y
     points = [Point(i) for i in np.array(list(zip(X, Y)))]
-    iteration_count= 1
+    iteration_count= 10
 
     best_clusters = iterative_kmeans(
             points,
@@ -77,14 +80,13 @@ def main():
             num_points,
             newnum
         )
-        # Print our best clusters
 
     #Printing the clusters
-    for i, c in enumerate(best_clusters):
-        for p in c.points:
-            print " Cluster: ", i, "\t Point :", p
+    # for i, c in enumerate(best_clusters):
+    #     for p in c.points:
+    #         print " Cluster: ", i, "\t Point :", p
 
-    # Display clusters using plotly for 2d data
+    #Display clusters using plotly for 2d data
     # if dimensions in [2, 3] and plotly:
     #     print "Plotting points, launching browser ..."
     #     plotClusters(best_clusters, dimensions)
@@ -105,7 +107,12 @@ def iterative_kmeans(points, num_clusters, cutoff, iteration_count,num_points,ne
     candidate_clusters = []
     errors = []
     #newnum, Dist, minim, points=phase1(points, num_clusters, num_points,newnum)
+    Dist = list(calcDist(points, num_points))
+    x=quicksort(Dist)
+    
 
+    for i in x:
+        print i
     for _ in range(iteration_count):
         clusters = kmeans(points, num_clusters, cutoff)
         error = calculateError(clusters)
@@ -163,8 +170,29 @@ def phase1(points, k, num_points, newnum):
     #print points
     return newnum, Dist, minim, points
 
+def calcDist(points, num_points):
 
+    Dist = (getDistance(points[0], points[i]) for i in range(num_points))
+    return Dist
+
+
+def quicksort(x):
+    if len(x) == 1 or len(x) == 0:
+        return x
+    else:
+        pivot = x[0]
+        i = 0
+        for j in range(len(x)-1):
+            if x[j+1] < pivot:
+                x[j+1],x[i+1] = x[i+1], x[j+1]
+                i += 1
+        x[0],x[i] = x[i],x[0]
+        first_part = quicksort(x[:i])
+        second_part = quicksort(x[i+1:])
+        first_part.append(x[i])
+        return first_part + second_part
     #print Dist
+
 def getmin(num_points, Dist,minim):
     for i in range(num_points):
         for j in range(num_points):
