@@ -72,7 +72,7 @@ def main():
     # print Y
     points = [Point(i) for i in np.array(list(zip(X, Y)))]
     #points= points[0:30]
-    iteration_count= 10
+    iteration_count= 1
 
     best_clusters = iterative_kmeans(
             points,
@@ -148,7 +148,7 @@ def getCentroid(x):
 
         for j in i:
             count+=1
-            print "J ",
+            
             #print j[0]
             sumx += j.coords[0]
             sumy += j.coords[1]
