@@ -78,6 +78,8 @@ def main():
             newnum
         )
         # Print our best clusters
+
+    #Printing the clusters
     for i, c in enumerate(best_clusters):
         for p in c.points:
             print " Cluster: ", i, "\t Point :", p
@@ -86,8 +88,6 @@ def main():
     # if dimensions in [2, 3] and plotly:
     #     print "Plotting points, launching browser ..."
     #     plotClusters(best_clusters, dimensions)
-
-
 
 #############################################################################
 # K-means Methods
