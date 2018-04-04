@@ -55,7 +55,7 @@ def main():
     num_clusters = 7
 
     # When do we say the process has 'converged' and stop updating clusters?
-    cutoff = 0.2
+    cutoff = 0.5
 
     # Generate some points to cluster
     # Note: If you want to use your own data, set points equal to it here.
@@ -117,11 +117,11 @@ def iterative_kmeans(points, num_clusters, cutoff, iteration_count,num_points,ne
         #for j in range(lengths)
 
     x=split(points,num_clusters)
-    initial_centroids = getCentroid(x)
+    initial_centroids = [Point(i) for i in getCentroid(x)]
     print initial_centroids
 
     for _ in range(iteration_count):
-        clusters = kmeans(points, num_clusters, cutoff)
+        clusters = kmeans(points, num_clusters, cutoff, initial_centroids)
         error = calculateError(clusters)
         candidate_clusters.append(clusters)
         errors.append(error)
@@ -248,11 +248,11 @@ def getmin(num_points, Dist,minim):
                     minim = Dist[i][j]
                     a,b=i,j
     return [a,b,minim]
-def kmeans(points, k, cutoff):
+def kmeans(points, k, cutoff, initial_centroids):
 
 
     # Pick out k random points to use as our initial centroids
-    initial_centroids = random.sample(points, k)
+    #initial_centroids = random.sample(points, k)
     #print "INITIAL\t", initial_centroids
     #initial_centroids = phase1(points, k)
 
