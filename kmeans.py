@@ -40,7 +40,7 @@ except ImportError:
 def main():
 
     # How many points are in our dataset?
-    num_points = 10
+    num_points = 3000
     newnum=num_points
     # For each of those points how many dimensions do they have?
     # Note: Plotting will only work in two or three dimensions
@@ -109,10 +109,13 @@ def iterative_kmeans(points, num_clusters, cutoff, iteration_count,num_points,ne
     #newnum, Dist, minim, points=phase1(points, num_clusters, num_points,newnum)
     Dist = list(calcDist(points, num_points))
     x=quicksort(Dist)
-    
 
-    for i in x:
-        print i
+
+    # for i in x:
+    #     print i
+    lengths = math.ceil(num_points/num_clusters)    
+        #for j in range(lengths)
+
     for _ in range(iteration_count):
         clusters = kmeans(points, num_clusters, cutoff)
         error = calculateError(clusters)
@@ -129,6 +132,15 @@ def iterative_kmeans(points, num_clusters, cutoff, iteration_count,num_points,ne
     best_clusters = candidate_clusters[ind_of_lowest_error]
 
     return best_clusters
+
+def chunkIt(seq, num):
+    avg = len(seq) / float(num)
+    out = []
+    last = 0.0
+    while last < len(seq):
+        out.append(seq[int(last):int(last + avg)])
+        last += avg
+    return out
 def phase1(points, k, num_points, newnum):
     m=1
     #print newnum
