@@ -77,7 +77,15 @@ def main():
             num_points,
             newnum
         )
+        # Print our best clusters
+    for i, c in enumerate(best_clusters):
+        for p in c.points:
+            print " Cluster: ", i, "\t Point :", p
 
+    # Display clusters using plotly for 2d data
+    # if dimensions in [2, 3] and plotly:
+    #     print "Plotting points, launching browser ..."
+    #     plotClusters(best_clusters, dimensions)
 
 
 
@@ -229,7 +237,7 @@ def kmeans(points, k, cutoff):
 
         # If the centroids have stopped moving much, say we're done!
         if biggest_shift < cutoff:
-            #print "Converged after %s iterations" % loopCounter
+            print "Converged after %s iterations" % loopCounter
             break
     return clusters
 
@@ -371,7 +379,7 @@ def calculateError(clusters):
     return error
 
 def plotClusters(data, dimensions):
-    return
+
     '''
     This uses the plotly offline mode to create a local HTML file.
     This should open your default web browser.
