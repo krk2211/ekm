@@ -40,7 +40,7 @@ except ImportError:
 def main():
 
     # How many points are in our dataset?
-    num_points = 3000
+    num_points = 30
     newnum=num_points
     # For each of those points how many dimensions do they have?
     # Note: Plotting will only work in two or three dimensions
@@ -62,6 +62,7 @@ def main():
     # points = [
     #     makeRandomPoint(dimensions, lower, upper) for i in xrange(num_points)
     # ]
+
     data = pd.read_csv('dataset1.csv')
     data.head()
     X = [abs(i) for i in data['x'].values]
@@ -70,6 +71,7 @@ def main():
     # print X
     # print Y
     points = [Point(i) for i in np.array(list(zip(X, Y)))]
+    #points= points[0:30]
     iteration_count= 10
 
     best_clusters = iterative_kmeans(
@@ -87,9 +89,9 @@ def main():
     #         print " Cluster: ", i, "\t Point :", p
 
     #Display clusters using plotly for 2d data
-    # if dimensions in [2, 3] and plotly:
-    #     print "Plotting points, launching browser ..."
-    #     plotClusters(best_clusters, dimensions)
+    if dimensions in [2, 3] and plotly:
+        print "Plotting points, launching browser ..."
+        plotClusters(best_clusters, dimensions)
 
 #############################################################################
 # K-means Methods
@@ -109,12 +111,14 @@ def iterative_kmeans(points, num_clusters, cutoff, iteration_count,num_points,ne
     #newnum, Dist, minim, points=phase1(points, num_clusters, num_points,newnum)
     Dist = list(calcDist(points, num_points))
     x=quicksort(Dist)
-
-
     # for i in x:
     #     print i
-    lengths = math.ceil(num_points/num_clusters)    
+    #lengths = math.ceil(num_points/num_clusters)
         #for j in range(lengths)
+
+    x=split(points,num_clusters)
+    initial_centroids = getCentroid(x)
+    print initial_centroids
 
     for _ in range(iteration_count):
         clusters = kmeans(points, num_clusters, cutoff)
@@ -133,7 +137,32 @@ def iterative_kmeans(points, num_clusters, cutoff, iteration_count,num_points,ne
 
     return best_clusters
 
-def chunkIt(seq, num):
+def getCentroid(x):
+
+    initial_centroids=[]
+    for i in x:
+        #print "I ",
+        sumx=0
+        sumy=0
+        count=0
+
+        for j in i:
+            count+=1
+            print "J ",
+            #print j[0]
+            sumx += j.coords[0]
+            sumy += j.coords[1]
+        sum1 = [sumx/count, sumy/count]
+        initial_centroids.append(sum1)
+    return initial_centroids
+    # if count == 0:
+    #     print "No points"
+    #     return [0,0]
+    # else:
+    #     return
+
+
+def split(seq, num):
     avg = len(seq) / float(num)
     out = []
     last = 0.0
@@ -141,6 +170,7 @@ def chunkIt(seq, num):
         out.append(seq[int(last):int(last + avg)])
         last += avg
     return out
+
 def phase1(points, k, num_points, newnum):
     m=1
     #print newnum
