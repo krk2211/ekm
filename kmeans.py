@@ -7,24 +7,7 @@ import random
 import numpy as np
 import pandas as pd
 
-"""
-This is a pure Python implementation of the K-means Clustering algorithmn. The
-original can be found here:
-http://pandoricweb.tumblr.com/post/8646701677/python-implementation-of-the-k-means-clustering
-I have refactored the code and added comments to aid in readability.
-After reading through this code you should understand clearly how K-means works.
-If not, feel free to email me with questions and suggestions. (iandanforth at
-gmail)
-This script specifically avoids using numpy or other more obscure libraries. It
-is meant to be *clear* not fast.
-I have also added integration with the plot.ly plotting library. So you can see
-the clusters found by this algorithm. To install run:
-```
-pip install plotly
-```
-This script uses an offline plotting mode and will store and open plots locally.
-To store and share plots online sign up for a plotly API key at https://plot.ly.
-"""
+
 Dist=[]
 a=0
 b=0
@@ -39,37 +22,29 @@ except ImportError:
 
 def main():
 
-    # How many points are in our dataset?
+    # Number of points in the dataset
     num_points = 3000
     newnum=num_points
-    # For each of those points how many dimensions do they have?
-    # Note: Plotting will only work in two or three dimensions
+    # Number of dimensions in the points
+    # Plot in 2D or 3D
     dimensions = 2
 
     # Bounds for the values of those points in each dimension
     lower = 0
     upper = 20
 
-    # The K in k-means. How many clusters do we assume exist?
-    #   - Must be less than num_points
-    num_clusters = 10
+    # The K in k-means. Number of clusters.
 
-    # When do we say the process has 'converged' and stop updating clusters?
-    cutoff = 0.5
+    num_clusters = input("Enter number of clusters")
+    # Threshold to say points converged
+    cutoff = 0.2
 
-    # Generate some points to cluster
-    # Note: If you want to use your own data, set points equal to it here.
-    # points = [
-    #     makeRandomPoint(dimensions, lower, upper) for i in xrange(num_points)
-    # ]
 
     data = pd.read_csv('dataset1.csv')
     data.head()
     X = [abs(i) for i in data['x'].values]
     Y = [abs(i) for i in data['y'].values]
 
-    # print X
-    # print Y
     points = [Point(i) for i in np.array(list(zip(X, Y)))]
     #points= points[0:30]
     iteration_count= 1
@@ -97,18 +72,11 @@ def main():
 # K-means Methods
 
 def iterative_kmeans(points, num_clusters, cutoff, iteration_count,num_points,newnum):
-    print "Iter"
-    """
-    K-means isn't guaranteed to get the best answer the first time. It might
-    get stuck in a "local minimum."
-    Here we run kmeans() *iteration_count* times to increase the chance of
-    getting a good answer.
-    Returns the best set of clusters found.
-    """
-    print "Running K-means %d times to find best clusters ..." % iteration_count
+
+    print "Running Advanced Mid Point K-means %d times to find best clusters ..." % iteration_count
     candidate_clusters = []
     errors = []
-    #newnum, Dist, minim, points=phase1(points, num_clusters, num_points,newnum)
+
     Dist = list(calcDist(points, num_points))
     x=quicksort(Dist)
     # for i in x:
@@ -141,7 +109,7 @@ def getCentroid(x):
 
     initial_centroids=[]
     for i in x:
-        #print "I ",
+
         sumx=0
         sumy=0
         count=0
@@ -149,7 +117,7 @@ def getCentroid(x):
         for j in i:
             count+=1
 
-            #print j[0]
+
             sumx += j.coords[0]
             sumy += j.coords[1]
         sum1 = [sumx/count, sumy/count]
@@ -161,6 +129,12 @@ def getCentroid(x):
     # else:
     #     return
 
+def absol(points):
+    a=[]
+    b=[]
+    for i in points:
+        a.append(points[i][0])
+        b.append(points[i][1])
 
 def split(seq, num):
     avg = len(seq) / float(num)
@@ -217,7 +191,6 @@ def calcDist(points, num_points):
     Dist = (getDistance(points[0], points[i]) for i in range(num_points))
     return Dist
 
-
 def quicksort(x):
     if len(x) == 1 or len(x) == 0:
         return x
@@ -249,15 +222,7 @@ def getmin(num_points, Dist,minim):
                     a,b=i,j
     return [a,b,minim]
 def kmeans(points, k, cutoff, initial_centroids):
-
-
-    # Pick out k random points to use as our initial centroids
-    #initial_centroids = random.sample(points, k)
-    #print "INITIAL\t", initial_centroids
-    #initial_centroids = phase1(points, k)
-
-    # Create k clusters using those centroids
-    # Note: Cluster takes lists, so we wrap each point in a list here.
+    # Create clusters
     clusters = [Cluster([p]) for p in initial_centroids]
     #print clusters
     # Loop through the dataset until the clusters stabilize
